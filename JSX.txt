@@ -1,0 +1,152 @@
+Only one root node!
+Whenever you create some JSX, 
+Babel transforms it into a function call. 
+Because JSX is really a function call, 
+we can only return one JSX node from any function or 
+method:
+
+const obj = {
+  valid() {
+    return (
+      <div> {/* This div is the only root node :) */}
+        <h1>Foo</h1>
+        <p>bar</p>
+      </div>
+    )
+  },
+  invalid() {
+    // this returns two root nodes!
+    return (
+      <h1>Foo</h1> {/* This h1 is a root node */}
+      <p>bar</p> {/* This p is also a root node! */}
+    )
+  }
+}
+
+function Invalid() {
+  // multiple root nodes
+  return (
+    <div />
+    <div />
+    <div />
+  )
+}
+
+function Valid() {
+  // one root node
+  return (
+    <div>
+      <div />
+      <div />
+      <div />
+    </div>
+  )
+}
+
+Curly braces
+When adding props to an element, we use curly braces for everything except string value props.
+
+Here are some examples of valid props usage:
+
+<Component stringProp="string" />;
+
+<Component numProp={123} />;
+
+<Component booleanProp={true} />;
+
+const obj = { foo: 'bar' };
+<Component objectProp={obj} />;
+
+const array = [ 'foo', 'bar' ];
+<Component arrayProp={array} />;
+
+const func = function() {};
+<Component functionProp={func} />;
+
+// This is invalid because it needs curly braces
+let anyVariable = '123'
+<Component prop=anyVariable />;
+Embedding expressions
+We can put expressions inside JSX. 
+Expressions can be variables, values, 
+returns from functions, anything that can be equated 
+to a value. Expressions must go inside curly braces.
+
+JSX inside a condition
+We can put JSX inside if statements, 
+loops, anywhere we would put a function call!
+
+Self-closing elements
+In JSX, every element needs to either 
+have a closing tag or be self-closing. 
+The following HTML for a br tag is invalid JSX.
+<!-- valid HTML br, would be invalid JSX -->
+<br>
+To convert this to JSX, it must be closed, so we need to add a forward slash at the end.
+
+// valid JSX
+const validJSX = <br />;
+// INVALID JSX!
+const invalidJSX = <br>;
+
+// valid:
+<App />
+
+// also valid:
+<App></App>
+
+// INVALID! Not closed!
+<App>
+
+Use camelCase prop names
+Although not required, it's preferred to use 
+camelCase names for props as they can be 
+accessed more easily.
+
+props['prop-name'] // less convenient prop name
+props.propName // more convenient prop name
+
+Don't pass numbers as strings
+<Comp num={123} /> // correct
+<Comp num="123" /> // incorrect
+This could lead the consuming component to attempt to use the num prop as a number with unexpected results.
+
+// accidentally passing number as a string
+<Comp num="123" />
+
+// inside the component
+props.num + 1 === '1231'; // JavaScript quirk
+
+{/* The spaces between these components will be removed */}
+<Component1 />    <Component2 />
+
+{/* The space between these components will be kept */}
+<Component1 />{' '}<Component2 />
+
+{/* Using standard HTML entities is also ok! */}
+<Component1 />&nbsp;<Component2 />
+
+Props aren't attributes
+Remember to check which props to use in place of standard HTML elements. Here are some examples.
+
+In HTML:
+
+<div class="foo"></div>
+<label for="foo"></label>
+<span style="color: 'red';"></span>
+<input tabindex="-1" readonly>
+The equivalent JSX:
+
+<div className="foo" />
+<label htmlFor="foo" />
+<span style={{ color: 'red' }} /> {/* value _must_ be an object, properties _must_ be camelCased */}
+<input tabIndex="-1" readOnly />
+There are many differences between props and attributes
+
+Custom components should be upper case
+When creating your own components, which we'll cover in more detail later, start the component name with upper case.
+
+// Bad
+const myComponent = () => <div />
+// Good
+const MyComponent = () => <div />
