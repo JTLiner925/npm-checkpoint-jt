@@ -1,0 +1,130 @@
+COMPONENT COMPOSITION
+create and render stateless components
+
+An advantage to React components is their 
+potential for re-use! We can make custom 
+components that can be used over and over 
+again in different sections of our codebase.
+
+EXAMPLE:
+
+We'll make a Split component first, this can be used to make each side of the layout.
+Create a new folder inside the ./src folder called composition.
+
+mkdir ./src/composition
+Create a new file inside the composition folder called Split.js.
+
+touch ./src/composition/Split.js
+Inside Split.js we will import React so that we can use JSX.
+
+./src/composition/Split.js
+
+import React from 'react'
+Then create a function for the component.
+function Split() {}
+We can make it return an empty div with a className of split.
+
+function Split() {
+  return (
+    <div className="split" />
+  );
+}
+Let's put some Lorem ipsum sample copy into the div so that we'll be able to see it.
+
+function Split() {
+  return (
+    <div className="split">
+      This is the content of the split component. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt ex velit suscipit facere officia?
+    </div>
+  );
+}
+Now we need to export this component so that we can import it into the App. Add a default export statement underneath the Split component:
+
+export default Split;
+Now import the Split component into the App.js file.
+./src/App.js
+
+import Split from './composition/Split';
+And use the Split component inside the App's render! Replace the existing App render with the code below that uses the <Split /> inside a main element.
+
+function App() {
+  return (
+    <main className='App'>
+      <Split />
+    </main>
+  )
+}
+Looking at App inside the browser we can see the Lorem ipsum content being displayed. If we duplicate the <Split /> multiple times it will render that content multiple times! Try it out:
+
+function App() {
+  return (
+    <main className='App'>
+      <Split />
+      <Split />
+      <Split />
+      <Split />
+    </main>
+  )
+}
+Reminder: Here we've created 4 instances of the Split component by writing <Split /> 4 times.
+
+Add in some CSS
+What we want to do now is style the Split 
+so it takes half the width of the page. 
+We'll use Flexbox to achieve a 50% width style.
+Create a new file for the App component's 
+CSS: ./src/App.css. 
+
+Webpack has enabled a feature 
+for us to add CSS files specifically for each component! This is a separation of concerns so we can focus on one section of styling at a time.
+
+Inside the App.css file, we add some CSS to 
+target the className .App that we used on the 
+div in the App component.
+
+App.css
+
+.App {
+  display: flex;
+  margin: 40px;
+  min-height: calc(100vh - 80px);
+}
+
+Webpack adds these styles into the browser for 
+us when we import them into our JavaScript files.
+using devTools you can see that our styles 
+are in the head.
+
+if you want to put the text in the 
+app file you must use {props.children} in the original component file
+when using props.children you need to put props in the arg     
+
+When adding css use Seperation of Concerns SOC, app.js uses app.css
+index.js uses index.css and so on...
+
+Normally we would think to  style these classNames in App.css, 
+  as they were added in the App.js file. 
+  *Split is just the name of a file*
+  Let's make the left Split dark with light 
+  text and the right Split the vice versa. 
+  Actually nothing happens!
+   We need to make the Split component configurable! 
+   We need to make the 
+   Split component understand the new classNames.
+
+   When we make custom components, they won't use any className props their parent gives them unless we explicitly add that feature to our custom component.
+
+Inside the Split component, add code to read the 
+props and create a new, combined className. 
+The combinedClassName includes the hardcoded split 
+class and the className passed 
+in as a prop (either right or left in this case).
+
+function Split(props) {
+  const combinedClassName = `split ${props.className}`;
+  return (
+    <div className={combinedClassName}>
+      {props.children}
+    </div>
+  );
+}
