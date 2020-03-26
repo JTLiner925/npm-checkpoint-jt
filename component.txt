@@ -128,3 +128,68 @@ function Split(props) {
     </div>
   );
 }
+
+Configurable sizes
+To make the Split component configurable, we can utilize the flex-basis style. At the moment we have specified the flex: 1 inside the Split.css file. If we change one of the Split instances to have a flex-basis: 2 instead, it will double the size of it compared to the other that has a flex-basis: 1.
+
+Inside the App component, let's add the prop we would like to work on. To make the left double the size of the right, add flexBasis={2} to the left Split.
+
+function App() {
+  return (
+    <main className='App'>
+      <Split className='left' flexBasis={2}>
+        This is the content for the left `Split`. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt ex velit suscipit facere officia?
+      </Split>
+      <Split className='right'>
+        This is the content for the right `Split`. Inventore aliquid cupiditate suscipit repellat. Quaerat quis officiis quam fuga. Aliquid quo possimus id soluta aspernatur.
+      </Split>
+    </main>
+  )
+}
+This won't do anything right now as we need to update 
+the Split component to use it.
+
+Inspect the React Developer Tools and see the 
+flexBasis prop being passed into the Split component. 
+The value is there but not doing anything.
+
+Inside the Split component now, we need to use 
+the prop to make it work. Let's use inline styles 
+to override the styles that were defined in the 
+Split.css as we can make inline styles within the 
+component.
+
+function Split(props) {
+  const combinedClassName = `split ${props.className}`;
+  const newStyles = { flex: props.flexBasis };
+  return (
+    <div
+      className={combinedClassName}
+      style={newStyles}
+    >
+      {props.children}
+    </div>
+  );
+}
+We've read the custom prop, flexBasis, and 
+created a newStyles object with the value for 
+flex from this custom prop. Then we've used the 
+newStyles object on the div as a styles prop. 
+The styles prop takes an object to add inline styles 
+to the rendered element. In this example we only have 1 
+style to add to this object, but you could pass any 
+number of styles in that same prop object.
+
+It's worth noting here, that when we read props 
+inside a component, we shouldn't alter them! Props 
+are read-only. You might be able to see text stating 
+"read-only" inside the React Developer Tools, you 
+can't change props directly.
+
+Now that the Split component is respecting the 
+flexBasis prop, the left side should be twice the 
+size of the right side!
+
+Change the flexBasis props passed into the Split. 
+Try flexBasis values of 3 and 4, you'll see the size 
+of the left and right alter accordingly.
