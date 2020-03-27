@@ -105,3 +105,163 @@ it in the Split component instance
   opacity: 1;
   visibility: visible;
 }
+
+Change the span.Tooltip-content inside the 
+Tooltip component like so:
+
+-<span className='Tooltip-content'>
++<span
++  className='Tooltip-content'
++  style={{ color: props.color }}
++>
+  {props.children}
+</span>
+
+Normally we would prefer to use a className and 
+CSS to control the style, but here we've used 
+inline styles. This is because we don't want to 
+write a CSS rule for every possible color someone 
+could use; inline styles give more control to the 
+parent component.
+
+Now we can update the instances of Tooltip that 
+we created in the App component. Let's add new 
+colors to them.
+
+// before
+const firstTooltip = (
+  <Tooltip message='tooltip message'>
+   ipsum
+  </Tooltip>
+)
+const secondTooltip = (
+  <Tooltip message='another tooltip message'>
+    officiis
+  </Tooltip>
+)
+// after
+const firstTooltip = (
+  <Tooltip color='hotpink' message='tooltip message'>
+   ipsum
+  </Tooltip>
+)
+const secondTooltip = (
+  <Tooltip color='#126BCC' message='another tooltip message'>
+    officiis
+  </Tooltip>
+)
+
+We can use defaultProps to move the default color 
+out of the CSS.
+
+First, let's remove the following line from the 
+Tooltip.css that makes the Tooltip green by 
+default.
+
+To use defaultProps, we'll take the opportunity 
+to introduce React class components.
+
+Note: it is possible to use default props with 
+function components as well. But classes are 
+important in React and default props give us a 
+gentle opportunity to write one.
+
+Classes
+Classes are a feature of standard ES6 JavaScript 
+that we can use to make a 
+React component with extra features.
+
+To create a class component, we start with the 
+outer definition. Let's make a class component 
+with the name TooltipClass.
+
+Let's make a class version of the Tooltip 
+component that sits side by side with the Tooltip 
+function component so you can compare the two.
+
+function Tooltip(props) {/* content not shown */}
+
+class TooltipClass extends React.Component {}
+
+// we're not exporting TooltipClass yet...
+export default Tooltip;
+
+Classes are similar to objects in that they can 
+contain methods. In React class components, 
+we need to make a method called render. 
+Render is the only method required for React 
+class components.
+
+class TooltipClass extends React.Component {
+  render() {
+    return <span />
+  }
+}
+The render method is similar to the 
+function components we've been building. 
+You return JSX to define what the component 
+will look like.
+
+One difference between render() and a function 
+Component() is how props work. In a function 
+component, props are a parameter, as we've seen. 
+In a class, however, props aren't a parameter 
+anymore, we need to access props using this.props.
+
+The following are equivalent:
+
+// props are a parameter
+function FunctionComponent(props) {
+  return <span>{props.children}</span>
+}
+
+// props accessed by `this.props`
+class ClassComponent extends React.Component {
+  render() {
+    return <span>{this.props.children}</span>
+  }
+}
+
+class TooltipClass extends React.Component {
+  render() {
+    console.log('Using a class component!')
+    console.log(this.props)
+    return (
+      <span className='Tooltip'>
+        <span
+          className='Tooltip-content'
+          style={{ color: this.props.color }}
+        >
+          {this.props.children}
+        </span>
+        <div className='Tooltip-message'>
+          {this.props.message}
+        </div>
+      </span>
+    )
+  }
+}
+
+Right now, we have 2 versions of the 
+tooltip component that are both functionally 
+the same, Tooltip and TooltipClass. 
+
+class TooltipClass extends React.Component {
+  static defaultProps = {
+    color: '#01A800', // green
+  };
+  render() {
+    /* content not shown */
+  }
+}
+ The rule for making default props is to 
+create a defaultProps property for the class with 
+static defaultProps and then assign an object to 
+that property. The keys of that object are the 
+props you want to have defaults for and the 
+values are the default values you want to assign.
+
+The defaultProp will be used if no equivalent 
+prop is supplied. In this case, it will make 
+the props.color have a default value of #01A800 
+when no other value is supplied.
