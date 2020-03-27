@@ -265,3 +265,226 @@ The defaultProp will be used if no equivalent
 prop is supplied. In this case, it will make 
 the props.color have a default value of #01A800 
 when no other value is supplied.
+
+What is composition?
+
+Components are like branches on a tree. 
+Each tree branch can contain 0 or more other 
+branches branching off from it. Each component 
+can also contain 0 or more other components. 
+We can think of React applications like this.
+
+In React, a component is like a branch, 
+and the JSX elements inside it are also 
+like branches off of it. We can give these 
+branches (components) names and when we talk 
+about a branch by its name, we're also talking 
+about the branches contained within it too.
+
+You can even think of one branch starting a new tree from 
+that point, a "sub" tree. This could be a new 
+component with its own internal tree of branches.
+
+Component composition is the approach of 
+arranging components within or next to each 
+other. Using composition, multiple components can 
+be combined into one new component.
+
+Take this App as an example.
+
+function App() {
+  return (
+    <div>
+      <h1 />
+      <p />
+      <CustomComponent />
+    </div>
+  )
+}
+In this example we've composed a div, h1, p 
+and CustomComponent to make a tree called App. 
+The div, h1, p and CustomComponent can be thought 
+of as branches.
+
+h1   p   CustomComponent
+\    |     /
+ \   |    /
+ |__div__|
+     |
+     |
+  |_App_|
+
+The custom component has its own JSX:
+
+function CustomComponent() {
+  return (
+    <ul>
+      <li />
+      <li />
+    </ul>
+  )
+}
+And, an associated tree:
+
+   li       li
+    \       /
+     \_____/
+      |_ul_|
+        |
+        |
+ |_CustomComponent_|
+
+
+If we consider the whole App, it has the following tree:
+
+App and Custom Component tree
+
+
+
+          li       li
+           \       /
+            \_____/
+             |_ul_|
+                |
+                |
+h1   p   CustomComponent
+\    |     /
+ \   |    /
+ |__div__|
+     |
+     |
+  |_App_|
+
+Why composition?
+To compose elements together means putting 
+components inside or next to each other. 
+Arranging components in different configurations 
+lets us achieve different results.
+
+The ability to compose components helps us 
+manage our app via smaller, more reusable pieces. 
+We can use and reuse one component as a child of many 
+other components. We can also make complex 
+components out of many simple ones that are much 
+easier to reason about on their own. The 
+possibilities are endless.
+
+Relationships
+Components can render other components. 
+This creates relationships between components. 
+The rendering component is what we call the 
+"parent". The component being rendered inside 
+another component is a "child" of the parent 
+component.
+
+Be careful: a child component is different from 
+the children prop. Props are actual values in 
+code, while parent-child relationships are how we 
+informally describe the ways in which different 
+components are composed together.
+
+Lists of components
+When building React applications, 
+knowing how to build lists of components is 
+essential. Most mobile applications are built on 
+lists; be it a list of friends, mail, restaurants, 
+songs, documents or even bubbles. Wait... 
+Did we say bubbles?
+
+You won't know the content of individual 
+items or even how many of those items might be 
+displayed at any time. So we need to make the 
+lists dynamic. The items might be only available 
+as the response from an API request.
+
+There are additional features in JSX and React 
+for displaying lists.
+
+So far we've seen rendering JSX elements, 
+composing them together in different ways. 
+We can also render arrays.
+
+const someJsx = (
+  <ul>
+    {[
+      <li />,
+      <li />,
+      <li />,
+    ]}
+  </ul>
+)
+We had to wrap the array in curly braces, 
+then the items inside the array are the JSX 
+elements themselves.
+
+There is one problem with the above code. 
+Imagine we have an application that supports 
+drag-and-drop to re-order the list items. 
+React will struggle to keep track of which 
+list item is which. The same problem might 
+occur if we add a new item to the list, how 
+would React manage the items to only add what's 
+needed?
+
+To solve this problem of tracking items in an 
+array, React requires us to add a unique key prop 
+to each element in the array.
+
+Let's modify the above example to fix the 
+tracking problem:
+
+const validJsx = (
+  <ul>
+    {[
+      <li key='uniqueKey' />,
+      <li key='anotherKey' />,
+      <li key='thirdUniqueKey' />,
+    ]}
+  </ul>
+)
+It's quite common to use id attributes or simple 
+numbers for keys as they are convenient when 
+rendering arrays.
+
+const alsoValidJsx = (
+  <ul>
+    {[
+      <li key={1} />,
+      <li key={2} />,
+      <li key={3} />,
+    ]}
+  </ul>
+)
+
+The above examples are just for demonstration 
+and it's rare to write code like this. Usually, 
+we would have an array from an API response and 
+want to generate elements from that array. We 
+can use an array's map method.
+
+Imagine we had the following response from a 
+server:
+
+{
+  "items": [
+    { "id": "abc123", "name": "Foo" },
+    { "id": "def456", "name": "Bar" },
+    { "id": "ghi789", "name": "Herp" },
+    { "id": "jkl012", "name": "Derp" }
+  ]
+}
+We can make an array of elements like so:
+
+const arrayOfLis = apiResponse.items.map((item) =>
+  <li key={item.id}>
+    {item.name}
+  </li>
+)
+return (
+  <ul>
+    {arrayOfLis}
+  </ul>
+)
+We've generated an array of li elements, 
+each with a unique key prop and displaying 
+the item.name.
