@@ -1,0 +1,107 @@
+Tooltip component
+A tooltip is a feature for giving 
+users some extra feedback. 
+When a user hovers their cursor over an 
+element, a message appears 
+next to the element with more information.
+
+Make a file called Tooltip.js in the 
+./src/composition directory that will 
+export a Tooltip component. Inside the 
+Tooltip.js file, let's start with the component. 
+Tooltips need to be inline so that they can 
+be used within paragraph text, so a span element 
+works. Also, add a className so that we can style 
+the Tooltip:
+
+import React from 'react';
+
+function Tooltip(props) {
+  return (
+    <span className='Tooltip'>
+    </span>
+  )
+}
+
+export default Tooltip;
+
+We'll need two sections inside the Tooltip, 
+one for the text to display and the second for 
+the message that appears on a hover. We'll use 
+the children prop for the normal text and a prop 
+called message for the text that will appear.
+
+function Tooltip(props) {
+  return (
+    <span className='Tooltip'>
+      <span className='Tooltip-content'>
+        {props.children}
+      </span>
+      <div className='Tooltip-message'>
+        {props.message}
+      </div>
+    </span>
+  )
+}
+We've also added a className on each of the 
+nested spans to implement tooltip-like behavior.
+
+inCSS fileFirst, we'll want the outer span to show a "pointer" cursor when a user hovers over it and we'll want relative positioning so we can anchor the message against it. Let's add some styles to Tooltip.css.
+
+.Tooltip {
+  position: relative;
+  cursor: pointer;
+}
+
+.Tooltip-content {
+  color: #01A800;
+}
+Next, we can style the message with white text on a dark background and get it to appear above the text.
+
+.Tooltip-message {
+  background-color: hsla(0, 0%, 10%, 0.9);
+  border-radius: 3px;
+  color: #fff;
+  left: 4vw;
+  margin-bottom: 5px;
+  margin-left: -8vw;
+  min-width: 160px;
+  padding: 7px 10px;
+  position: absolute;
+  text-align: center;
+  top: calc(-1.2em - 14px);
+  white-space: nowrap;
+}
+
+We want the tooltip to look a bit like a speech bubble as well so we can add some styles to make a little triangle underneath the message box.
+
+/* triangle */
+.Tooltip-message:after {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  content: " ";
+  font-size: 0;
+  left: 6vw;
+  line-height: 0;
+  margin-left: -5px;
+  position: absolute;
+  top: calc(18px + 14px);
+  width: 0;
+}
+
+Don't forget to import CSS into the JS file
+We imported the Tooltip into app.js and called 
+it in the Split component instance
+
+/* start hidden */
+.Tooltip-message {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+/* show on hover */
+.Tooltip:hover > .Tooltip-message {
+  opacity: 1;
+  visibility: visible;
+}
