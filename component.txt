@@ -152,7 +152,7 @@ the Split component to use it.
 Inspect the React Developer Tools and see the 
 flexBasis prop being passed into the Split component. 
 The value is there but not doing anything.
-
+//
 Inside the Split component now, we need to use 
 the prop to make it work. Let's use inline styles 
 to override the styles that were defined in the 
