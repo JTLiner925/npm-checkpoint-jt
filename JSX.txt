@@ -4,7 +4,7 @@ Babel transforms it into a function call.
 Because JSX is really a function call, 
 we can only return one JSX node from any function or 
 method:
-
+/
 const obj = {
   valid() {
     return (
