@@ -1,0 +1,9 @@
+An accordion is a website widget that has a list of content sections that start collapsed. By clicking on buttons, we can open one content section at a time. When you open one content section it closes the other.
+
+The accordion has the following requirements.
+
+The list of accordion items (content sections) is set in the initial state. Each section is represented in state by an object with title and section keys.
+The Accordion component will show a list of buttons that have their text populated by the accordion item titles.
+When you click on a button, the appropriate content section should show below the button. All other open content sections should close.
+Write at least one smoke test and 3 snapshot tests for this component covering the initial rendering and when 1 or 2 buttons have been clicked.
+Extra: What happens if you click the same button twice in a row? You can decide what should happen here but write a test for the expected behavior.
