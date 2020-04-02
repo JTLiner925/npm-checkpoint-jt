@@ -66,6 +66,12 @@ a String describing the test and the test function itself.
 Jest Matchers Link
 https://jestjs.io/docs/en/using-matchers
 
+import React from 'react';
+import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
+
+$ npm install react-test-renderer -D
+
 $ npm test
 
 .toThrow Jest

@@ -1,0 +1,113 @@
+With React, this idea of "state" still applies. React state is a feature that we can use to change the current condition of a particular component.
+The <state /> component needs to be self-contained, in other words, it should be responsible for its own date-time.
+example:
+
+import React from 'react';
+
+class TheDate extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {}
+    }
+    * or Jorge showed me to do it this way*
+    state = {
+        name: 'name',
+    }
+    render(){
+        return <div>{this.state.name}</div>
+    }
+}
+
+export default TheDate;
+
+i.e. - ReferenceError: you must initialize - super() 
+
+This is because the constructor is used by React internals when components are created! Constructors are a life-cycle method.
+React.Component is a class that React provides for us, and we use class MyClass extends AnotherClass to copy and "extend" the blueprint from one class to a new class.
+When we use the extends React.Component syntax, we're building a new blueprint based off of the React.Component class.
+
+class TheDate extends React.Component {
+constructor(props) {
+  super(props)
+  this.state = { datetime: new Date() };
+}
+render() {
+  return (
+    <div>{this.state.datetime.toLocaleString()}</div>
+  )
+}
+}
+To summarize, we've set an initial state in the constructor method and then read that state within the render. We accessed the datetime property on the state object and used the date method toLocaleString() to display the date in a human-readable format.
+
+from test file
+import React from 'react';
+import ReactDOM from 'react-dom'
+import renderer from 'react-test-renderer'
+import TheDate from './TheDate'
+
+describe(`TheDate Component`, () => {
+  it('renders without crashing', () => {
+    const div = document.createElement('div');
+    ReactDOM.render(<TheDate />, div);
+    ReactDOM.unmountComponentAtNode(div);
+  })
+
+  it('renders the UI as expected', () => {
+    expect(
+      renderer.create(<TheDate />).toJSON()
+    ).toMatchSnapshot()
+  })
+})
+
+can do it.skip() in order to continue working, 
+This allows us to keep "work in progress" test code and Jest will remind us (by saying we have skipped tests) that we have incomplete tests we can fix later.
+
+The life-cycle methods are on the left here:
+
+constructor = Enter the restaurant and ask for the buffet
+render = Collect food from the buffet
+The DOM is updated = Eat the food
+This isn't a life-cycle method, but it is part of the life-cycle
+componentDidMount = Ask for condiments, tap water, more cutlery
+componentWillUnmount = Pay the bill and leave
+
+The constructor happens once per component instance (once every time we use the component in JSX). The render can happen multiple times, for example, if the props keep changing, the render will happen every time they change.
+
+There are 2 life-cycle methods we haven't spoken about yet, componentDidMount and componentWillUnmount -- you might have some intuition about what these mean. The componentDidMount could happen multiple times (for example, conditional rendering, where props change the component from rendered to not rendered).
+It's best-practice to clean up after yourself if a component gets unmounted. The way to do this with setInterval is using a clearInterval. We'll need to save the interval when we create it so that we can unmount it later --- let's put it in this.interval.
+
+Add a componentWillUnmount that cleans up the interval when the component is removed from the DOM. We don't want any setInterval's hanging around when they shouldn't be!
+We can't update the state this way. React needs to be notified about the update. If we directly mutate the component state, then React won't know about the change!
+
+To fix this, we need to use a method called setState. The setState method takes an object argument that the component will then merge with the existing state. Use setState with an object containing the new datetime key and value.
+
+Each React component goes through different phases of life. The full list of possible phases is called the component life-cycle. There are different methods on React component classes that allow us to trigger code at phases of the life-cycle. These methods enable us as developers to add behavior to components, optimise them and integrate with other libraries, amongst other things!
+
+Technical details
+Components created as classes have more features, such as life-cycle methods.
+
+Each component class has several “life-cycle methods” that you can override on the class. These methods allow us to add behavior when a component is created, mounted, updated or removed.
+
+The only required method is render. The other methods are optional.
+
+This is an incomplete list of the methods:
+
+constructor = The component is created, e.g. <Component />
+render = The component is reacting to being created or updated
+This will happen at least once
+If the component's props change, render can happen again
+If the component's state changes, render can also happen again
+update the DOM = The component is added or changed in the DOM
+If the component's render function returns something, it'll be mounted
+If the result of render function is different to what's on the page, it'll be updated
+componentDidMount = The component has been added to the DOM
+componentWillUnmount = The component is about to be removed from the DOM
+When the parent component's render doesn't render this component anymore, the component will be removed
+
+Event listeners: a counter component
+Events and state go hand in hand. It's very common to update state in response to a user action such as submitting a form, interacting with a control or clicking a button!
+
+Let's make a component called Counter that displays a count; when you click a button it adds 1 to the count.
+
+To get started quickly, here's a basic Counter component that's got a count state initialized to 0 and a button that isn't functional.
+onClick is an event handling prop specifically for when elements are clicked. There is also: onSubmit for forms being submitted, onHover when an element gets hovered over, onBlur when an element is blurred, and many more...
