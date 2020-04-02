@@ -7,3 +7,12 @@ The Accordion component will show a list of buttons that have their text populat
 When you click on a button, the appropriate content section should show below the button. All other open content sections should close.
 Write at least one smoke test and 3 snapshot tests for this component covering the initial rendering and when 1 or 2 buttons have been clicked.
 Extra: What happens if you click the same button twice in a row? You can decide what should happen here but write a test for the expected behavior.
+
+esting event listeners
+To test the component more comprehensively, we should take another snapshot after clicking a button (at the very least). This would show us that the content updates when a button is clicked.
+
+Unfortunately, we can't click on buttons in tests using react-test-renderer. The most popular library to help us click on buttons is enzyme. Enzyme is a testing library purposefully built for testing React components. It has many features such as inspecting state, debugging, traversing nodes, etc... We're going to focus on using Enzyme for testing event handlers here.
+
+First, install Enzyme as a development dependency. There's also an enzyme-adapter-react-16 which we can use to tell Enzyme which version of React we're working with. So we'll install both.
+
+npm install enzyme enzyme-adapter-react-16 --save-dev
